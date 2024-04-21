@@ -23,7 +23,7 @@ namespace BackerUpperConfig
 			#if DEBUG
 			string json_dir = "../../../../RunBackup/config.json";
 			#else
-			string json_dir = "data/config.json";
+			string json_dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)! + "\data\config.json";
 			#endif
 
 			using (StreamReader reader = new StreamReader(json_dir))
