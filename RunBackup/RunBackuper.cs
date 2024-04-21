@@ -15,10 +15,22 @@ if (Config.origin_dir == null || Config.origin_dir == "")
 	Environment.Exit(-1);	//	Origin directory value is empty or null
 }
 
+//	Validate existance of origin dir
+if (!Directory.Exists(Config.origin_dir))
+{
+	Environment.Exit(-10);	//	Origin directory does not exist
+}
+
 //	Validating backup directory
 if (Config.backup_dir == null || Config.backup_dir == "")
 {
 	Environment.Exit(-2);	//	Backup (destination) value directory is empty or null
+}
+
+//	Validate existance of backup dir
+if (!Directory.Exists(Config.backup_dir))
+{
+	Environment.Exit(-20);	//	Backup directory does not exist
 }
 
 try

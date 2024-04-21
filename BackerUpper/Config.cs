@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace RunBackupConfig
+namespace BackerUpperConfig
 {
 	internal static class Config
 	{
@@ -21,12 +20,11 @@ namespace RunBackupConfig
 
 		internal static void LoadFromJson()
 		{
-			
 			#if DEBUG
-			string json_dir = "../../../config.json";
-#else
-			string json_dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)! + "\\config.json";
-#endif
+			string json_dir = "../../../../RunBackup/config.json";
+			#else
+			string json_dir = "data/config.json";
+			#endif
 
 			using (StreamReader reader = new StreamReader(json_dir))
 			{
@@ -49,6 +47,24 @@ namespace RunBackupConfig
 				origin_dir = configuration.origin_dir;
 				backup_dir = configuration.backup_dir;
 			}
+		}
+
+		internal static void SaveToJson()
+		{
+			#if DEBUG
+			string json_dir = "../../../../RunBackup/config.json";
+			#else
+			string json_dir = "data/config.json";
+			#endif
+			Rootobject json_obj = new Rootobject {
+				origin_dir = Config.origin_dir,
+				backup_dir = Config.backup_dir
+			};
+			var options = new JsonSerializerOptions { WriteIndented = true };
+			string json = JsonSerializer.Serialize(json_obj, options);
+			StreamWriter writer = new StreamWriter(json_dir);
+			writer.Write(json);
+			writer.Close();
 		}
 	}
 }

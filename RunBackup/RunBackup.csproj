@@ -1,10 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>backup</PackageId>
+    <Title>Run Backup</Title>
+    <Version>1.0.0</Version>
+    <Authors>Tommy</Authors>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <AssemblyName>RunBackup</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\icon.ico" />
+  </ItemGroup>
 
 </Project>
