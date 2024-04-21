@@ -4,5 +4,8 @@
     <Compile Update="HomeScreen.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="InputScheduledData.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

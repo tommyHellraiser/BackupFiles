@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HomeScreen));
 			lblOriginDirectory = new Label();
 			lblShowOriginDirectory = new Label();
 			btnChangeOrigin = new Button();
@@ -35,7 +36,7 @@
 			lblShowDestinationDirectory = new Label();
 			lblDestinationDirectory = new Label();
 			btnRunBackupNow = new Button();
-			button1 = new Button();
+			btnScheduleTask = new Button();
 			btnSaveConfiguration = new Button();
 			folderBrowserDialog1 = new FolderBrowserDialog();
 			SuspendLayout();
@@ -54,7 +55,7 @@
 			// 
 			lblShowOriginDirectory.BackColor = SystemColors.ButtonFace;
 			lblShowOriginDirectory.BorderStyle = BorderStyle.Fixed3D;
-			lblShowOriginDirectory.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblShowOriginDirectory.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			lblShowOriginDirectory.Location = new Point(29, 58);
 			lblShowOriginDirectory.Name = "lblShowOriginDirectory";
 			lblShowOriginDirectory.Size = new Size(378, 32);
@@ -87,7 +88,7 @@
 			// 
 			lblShowDestinationDirectory.BackColor = SystemColors.ButtonFace;
 			lblShowDestinationDirectory.BorderStyle = BorderStyle.Fixed3D;
-			lblShowDestinationDirectory.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			lblShowDestinationDirectory.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			lblShowDestinationDirectory.Location = new Point(29, 196);
 			lblShowDestinationDirectory.Name = "lblShowDestinationDirectory";
 			lblShowDestinationDirectory.Size = new Size(378, 32);
@@ -115,15 +116,16 @@
 			btnRunBackupNow.UseVisualStyleBackColor = true;
 			btnRunBackupNow.Click += btnRunBackupNow_Click;
 			// 
-			// button1
+			// btnScheduleTask
 			// 
-			button1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			button1.Location = new Point(29, 350);
-			button1.Name = "button1";
-			button1.Size = new Size(207, 48);
-			button1.TabIndex = 7;
-			button1.Text = "Schedule task";
-			button1.UseVisualStyleBackColor = true;
+			btnScheduleTask.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			btnScheduleTask.Location = new Point(29, 350);
+			btnScheduleTask.Name = "btnScheduleTask";
+			btnScheduleTask.Size = new Size(207, 48);
+			btnScheduleTask.TabIndex = 7;
+			btnScheduleTask.Text = "Schedule task";
+			btnScheduleTask.UseVisualStyleBackColor = true;
+			btnScheduleTask.Click += btnScheduleTask_Click;
 			// 
 			// btnSaveConfiguration
 			// 
@@ -141,9 +143,9 @@
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = SystemColors.ActiveCaption;
-			ClientSize = new Size(448, 475);
+			ClientSize = new Size(444, 475);
 			Controls.Add(btnSaveConfiguration);
-			Controls.Add(button1);
+			Controls.Add(btnScheduleTask);
 			Controls.Add(btnRunBackupNow);
 			Controls.Add(btnChangeDestination);
 			Controls.Add(lblShowDestinationDirectory);
@@ -152,8 +154,10 @@
 			Controls.Add(lblShowOriginDirectory);
 			Controls.Add(lblOriginDirectory);
 			FormBorderStyle = FormBorderStyle.FixedSingle;
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			MaximizeBox = false;
 			Name = "HomeScreen";
+			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Backer Upper";
 			ResumeLayout(false);
 			PerformLayout();
@@ -168,7 +172,7 @@
 		private Label lblShowDestinationDirectory;
 		private Label lblDestinationDirectory;
 		private Button btnRunBackupNow;
-		private Button button1;
+		private Button btnScheduleTask;
 		private Button btnSaveConfiguration;
 		private FolderBrowserDialog folderBrowserDialog1;
 	}

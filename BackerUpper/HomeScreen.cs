@@ -1,5 +1,9 @@
 using BackerUpperConfig;
 using System.Diagnostics;
+using Microsoft.Win32.TaskScheduler;
+using BackerUpper;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace BackupFiles
 {
@@ -8,6 +12,22 @@ namespace BackupFiles
 		public HomeScreen()
 		{
 			InitializeComponent();
+
+			ToolTip change_origin_tip = new ToolTip();
+			change_origin_tip.SetToolTip(btnChangeOrigin, "Change origin folder selection");
+
+			ToolTip change_destination_tip = new ToolTip();
+			change_destination_tip.SetToolTip(btnChangeDestination, "Change destination folder selection");
+
+			ToolTip save_config_tip = new ToolTip();
+			save_config_tip.SetToolTip(btnSaveConfiguration, "Save folders configuration in config file");
+
+			ToolTip schedule_task_tip = new ToolTip();
+			schedule_task_tip.SetToolTip(btnScheduleTask, "Create a new task in the Task Scheduler");
+
+			ToolTip backup_tip = new ToolTip();
+			backup_tip.SetToolTip(btnRunBackupNow, "Execute the backup using the folders saved in configurations");
+
 			try
 			{
 				Config.LoadFromJson();
@@ -27,11 +47,11 @@ namespace BackupFiles
 
 		private void btnRunBackupNow_Click(object sender, EventArgs e)
 		{
-#if DEBUG
+			#if DEBUG
 			string path = "../../../data/RunBackup.exe";
-#else
-			string path = "data/RunBackup.exe";
-#endif
+			#else
+			string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)! + "\\data\\RunBackup.exe";
+			#endif
 			//	Prep start process
 			var proc = new Process
 			{
@@ -112,7 +132,105 @@ namespace BackupFiles
 
 		private void btnSaveConfiguration_Click(object sender, EventArgs e)
 		{
-			Config.SaveToJson();
+			try
+			{
+				Config.SaveToJson();
+				MessageBox.Show(
+					"Configuration Saved!",
+					"Info",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+			}
+			catch
+			{
+				MessageBox.Show(
+					"Error saving configuration",
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+			}
+		}
+
+		private void btnScheduleTask_Click(object sender, EventArgs e)
+		{
+			InputScheduledData new_task= new InputScheduledData();
+			new_task.ShowDialog();
+
+			if (new_task.task_name == null)
+			{
+				MessageBox.Show(
+					"Cancelled task creation",
+					"Info",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				return;
+			}
+
+			// Get the service on the local machine
+			using (TaskService ts = new TaskService())
+			{
+				// Create a new task definition and assign properties
+				TaskDefinition td = ts.NewTask();
+				td.RegistrationInfo.Description = new_task.task_name;
+
+				// Create a trigger that will fire the task at this time every other day
+				switch (new_task.trigger)
+				{
+					case TriggerType.Startup:
+						td.Triggers.Add(new LogonTrigger());
+						break;
+					case TriggerType.Daily:
+						td.Triggers.Add(new DailyTrigger { DaysInterval = (short)new_task.interval!, StartBoundary = (DateTime)new_task.time! });
+						//td.Triggers.Add(new TimeTrigger((DateTime)new_task.time!));
+						break;
+					case TriggerType.Weekly:
+						td.Triggers.Add(new WeeklyTrigger { WeeksInterval = (short)new_task.interval!, StartBoundary = (DateTime)new_task.time! });
+						td.Triggers.Add(new TimeTrigger((DateTime)new_task.time!));
+						break;
+					case TriggerType.Monthly:
+						//td.Triggers.Add(new MonthlyTrigger {  = (short)new_task.interval! });
+						//td.Triggers.Add(new TimeTrigger((DateTime)new_task.time!));
+						break;
+					default:
+						td.Triggers.Add(new LogonTrigger());
+						break;
+				}
+				//td.Triggers.Add(new DailyTrigger { DaysInterval = 1 });
+				//td.Triggers.Add(new TimeTrigger());
+
+				// Create an action that will launch Notepad whenever the trigger fires
+				#if DEBUG
+				string path = "../../../data/RunBackup.exe";
+				#else
+				string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)! + "\\data\\RunBackup.exe";
+				#endif
+				td.Actions.Add(new ExecAction(Path.GetFullPath(path)));
+
+				// Register the task in the root folder
+				var task = ts.RootFolder.RegisterTaskDefinition(@new_task.task_name, td);
+				if (task != null)
+				{
+					MessageBox.Show(
+						"Task created successfully!",
+						"Created",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+					);
+				}
+				else
+				{
+					MessageBox.Show(
+						"Error creating task!",
+						"Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+				}
+			}
 		}
 	}
 }

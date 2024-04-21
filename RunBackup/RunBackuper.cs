@@ -35,7 +35,10 @@ if (!Directory.Exists(Config.backup_dir))
 
 try
 {
-	CopyDirectory(Config.origin_dir, Config.backup_dir);
+	string full_destination_dir = Config.backup_dir;
+	int index = Config.origin_dir.LastIndexOf('\\');
+	full_destination_dir += Config.origin_dir.Substring(index);
+	CopyDirectory(Config.origin_dir, full_destination_dir);
 }
 catch
 {
