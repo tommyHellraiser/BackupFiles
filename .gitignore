@@ -1,3 +1,10 @@
+BackerUpper/bin
+BackerUpper/obj
+BackerUpper/.vs
+RunBackup/obj
+RunBackup/bin
+RunBackup/.vs
+.vs
 bin
 obj
-.vs
+Test dirs

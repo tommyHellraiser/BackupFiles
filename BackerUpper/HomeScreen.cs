@@ -1,8 +1,8 @@
 namespace BackupFiles
 {
-	public partial class Form1 : Form
+	public partial class HomeScreen : Form
 	{
-		public Form1()
+		public HomeScreen()
 		{
 			InitializeComponent();
 		}
